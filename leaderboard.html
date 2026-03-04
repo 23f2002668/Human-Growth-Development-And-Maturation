@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏆 Leaderboard · Anam Shah Coaching Classes</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #2d3748;
+            line-height: 1.7;
+            padding: 30px 20px 30px 20px;
+            margin: 0 !important;
+            padding-top: 0 !important;
+            min-height: 100vh;
+        }
+
+        /* Main container */
+        .leaderboard-wrapper {
+            max-width: 1300px;
+            margin: 20px auto 0 auto !important;
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+            padding: 50px 60px 50px 60px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Beautiful Fixed Header with Pink-Purple Gradient (exactly from notes) */
+        .fixed-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            background: linear-gradient(120deg, #ff1493 0%, #da70d6 40%, #9370db 70%, #8a2be2 100%);
+            padding: 15px 35px;
+            box-shadow: 0 10px 30px rgba(138,43,226,0.4);
+            z-index: 999999;
+            border-bottom: 4px solid rgba(255,255,255,0.6);
+            background-size: 300% 300%;
+            animation: gradientShift 8s ease infinite;
+            box-sizing: border-box;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .header-btn {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.4);
+            color: white !important;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 10px 22px;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 8px 20px rgba(138,43,226,0.3);
+            cursor: pointer;
+        }
+
+        .header-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(138,43,226,0.5);
+            border: 1px solid rgba(255,255,255,0.9);
+            background: rgba(255,255,255,0.25);
+        }
+
+        .header-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .header-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .header-title {
+            font-size: 1.8rem !important;
+            margin: 0 !important;
+            color: white !important;
+            font-weight: 900 !important;
+            line-height: 1.2 !important;
+            background: none !important;
+            -webkit-background-clip: unset !important;
+            -webkit-text-fill-color: white !important;
+            background-clip: unset !important;
+            text-shadow: 3px 3px 6px rgba(138,43,226,0.5) !important;
+            border: none !important;
+            padding: 0 !important;
+        }
+
+        .header-gem {
+            font-size: 30px;
+            background: linear-gradient(135deg, #ff1493, #8a2be2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Spacer to push content below fixed header */
+        .header-spacer {
+            height: 100px;
+            width: 100%;
+        }
+
+        /* Leaderboard specific styles */
+        h1 {
+            font-size: 3.2rem;
+            background: linear-gradient(145deg, #1a2980, #26a0da);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-top: 0.3em;
+            margin-bottom: 1em;
+            padding-bottom: 25px;
+            border-bottom: 5px solid;
+            border-image: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1) 1;
+        }
+
+        h1 i {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-right: 15px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .refresh-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+            padding: 15px 35px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            border: 2px solid rgba(255,255,255,0.3);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .refresh-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(138,43,226,0.4);
+            background: linear-gradient(135deg, #764ba2, #667eea);
+        }
+
+        .stats {
+            background: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            color: #4a2b6e;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            font-size: 1.1rem;
+        }
+
+        .stats i {
+            color: #9b59b6;
+            margin-right: 8px;
+        }
+
+        .table-wrapper {
+            background: white;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1.2rem;
+        }
+
+        th {
+            background: linear-gradient(135deg, #4a2b6e, #6c3483);
+            color: white;
+            padding: 18px 20px;
+            font-weight: 700;
+            text-align: left;
+            font-size: 1.1rem;
+        }
+
+        th i {
+            margin-right: 10px;
+            color: #ffd700;
+        }
+
+        td {
+            padding: 15px 20px;
+            border-bottom: 1px solid #e0d4ff;
+            font-weight: 500;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:nth-child(even) td {
+            background-color: #f8f4ff;
+        }
+
+        tr:hover td {
+            background: linear-gradient(135deg, #fff5e6, #fff);
+            transition: 0.2s;
+        }
+
+        .rank-col {
+            width: 100px;
+            color: #4a2b6e;
+            font-weight: 700;
+            font-size: 1.3rem;
+        }
+
+        .name-col {
+            color: #1e102f;
+            font-weight: 600;
+        }
+
+        .score-col {
+            font-weight: 700;
+            color: #0f7b3a;
+        }
+
+        .medal-gold { color: #ffd700; }
+        .medal-silver { color: #c0c0c0; }
+        .medal-bronze { color: #cd7f32; }
+
+        .no-data {
+            text-align: center;
+            padding: 60px;
+            color: #6c757d;
+            font-size: 1.4rem;
+        }
+
+        .no-data i {
+            font-size: 4rem;
+            color: #b19cd9;
+            margin-bottom: 20px;
+        }
+
+        .status-message {
+            margin: 20px 0;
+            padding: 15px 25px;
+            border-radius: 50px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .last-updated {
+            text-align: center;
+            color: #6c757d;
+            font-size: 1rem;
+            margin-top: 20px;
+            font-style: italic;
+        }
+
+        /* Bottom Contact Section (from notes) */
+        .contact-section {
+            margin-top: 50px;
+            width: 100%;
+            background: linear-gradient(135deg, #1a2980 0%, #26a0da 100%);
+            border-radius: 30px 30px 0 0;
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.2);
+            padding: 40px 20px 20px 20px;
+        }
+
+        .contact-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 25px 35px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            transition: transform 0.3s;
+            min-width: 280px;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .contact-icon {
+            background: linear-gradient(135deg, #ff1493, #8a2be2);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .contact-icon i {
+            font-size: 28px;
+            color: white;
+        }
+
+        .contact-label {
+            margin: 0;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        .contact-value {
+            margin: 5px 0 0 0;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .contact-email {
+            margin: 5px 0 0 0;
+            color: white;
+            font-size: 1.3rem;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .footer-divider {
+            width: 80%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+            margin: 10px 0;
+        }
+
+        .footer-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .footer-dot:nth-child(1) { background: #ff1493; }
+        .footer-dot:nth-child(2) { background: #da70d6; }
+        .footer-dot:nth-child(3) { background: #9370db; }
+        .footer-dot:nth-child(4) { background: #8a2be2; }
+
+        @media (max-width: 768px) {
+            .leaderboard-wrapper { padding: 25px 20px; }
+            h1 { font-size: 2.3rem; }
+            .contact-card { padding: 20px 25px; }
+            .contact-value { font-size: 1.2rem; }
+            .fixed-header { padding: 12px 20px; }
+            .header-title { font-size: 1.3rem !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== EXACT HEADER FROM NOTES FILE ===== -->
+    <div class="fixed-header">
+        <div style="max-width: 1400px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
+            <!-- Logo and Institute Name -->
+            <div style="display: flex; align-items: center; gap: 18px;">
+                <div style="background: white; width: 55px; height: 55px; border-radius: 18px; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(138,43,226,0.4); transform: rotate(5deg); transition: transform 0.3s; border: 2px solid rgba(255,255,255,0.8);"
+                     onmouseover="this.style.transform='rotate(0deg) scale(1.1)'"
+                     onmouseout="this.style.transform='rotate(5deg)'">
+                    <i class="fas fa-gem header-gem"></i>
+                </div>
+                <div>
+                    <h1 class="header-title">Anam Shah Coaching Classes</h1>
+                    <div style="display: flex; align-items: center; gap: 8px; margin-top: 3px;">
+                        <i class="fas fa-star" style="color: white; text-shadow: 0 0 10px rgba(255,255,255,0.8);"></i>
+                        <p style="margin: 0; color: white; font-size: 0.9rem; font-weight: 600; letter-spacing: 1px;">EXCELLENCE IN EDUCATION SINCE 2010</p>
+                        <i class="fas fa-star" style="color: white; text-shadow: 0 0 10px rgba(255,255,255,0.8);"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                <a href="#" class="header-btn" id="notesBtn">
+                    <i class="fas fa-book"></i> Notes
+                </a>
+                <a href="#" class="header-btn" id="quizBtn">
+                    <i class="fas fa-question-circle"></i> Quiz
+                </a>
+                <a href="#" class="header-btn" style="position: relative;" id="leaderboardBtn">
+                    <i class="fas fa-trophy"></i> Leader Board
+                    <span style="position: absolute; top: -8px; right: -5px; background: white; color: #8a2be2; border-radius: 30px; padding: 3px 8px; font-size: 0.7rem; font-weight: 800; box-shadow: 0 3px 8px rgba(0,0,0,0.3);">✨</span>
+                </a>
+                <button class="header-btn" onclick="window.print()">
+                    <i class="fas fa-print"></i> Print
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Spacer to push content below fixed header -->
+    <div class="header-spacer"></div>
+
+    <!-- Main Leaderboard Content -->
+    <div class="leaderboard-wrapper">
+        <h1><i class="fas fa-crown"></i> RESULTS LEADERBOARD</h1>
+
+        <!-- Controls -->
+        <div class="controls">
+            <button class="refresh-btn" id="refreshBtn">
+                <i class="fas fa-sync-alt"></i> Refresh Leaderboard
+            </button>
+            <div class="stats">
+                <i class="fas fa-users"></i> <span id="totalEntries">0</span> Total Submissions
+            </div>
+        </div>
+
+        <!-- Status message -->
+        <div id="statusMessage" class="status-message hidden"></div>
+
+        <!-- Leaderboard table -->
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th><i class="fas fa-trophy"></i> Rank</th>
+                        <th><i class="fas fa-user"></i> Name</th>
+                        <th><i class="fas fa-star"></i> Score</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboardBody">
+                    <tr>
+                        <td colspan="3" class="no-data">
+                            <i class="fas fa-spinner fa-pulse"></i><br>
+                            Loading leaderboard...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="last-updated" id="lastUpdated">
+            Last updated: Just now
+        </div>
+    </div>
+
+    <!-- Bottom Contact Section (exactly from notes) -->
+    <div class="contact-section">
+        <div style="max-width: 1300px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 30px;">
+
+            <!-- Contact Information Cards -->
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; width: 100%;">
+
+                <!-- Name Card -->
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div>
+                        <p class="contact-label">NAME</p>
+                        <p class="contact-value">Anam Shah</p>
+                    </div>
+                </div>
+
+                <!-- Email Card -->
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div>
+                        <p class="contact-label">EMAIL</p>
+                        <a href="mailto:anamshah113@gmail.com" class="contact-email">anamshah113@gmail.com</a>
+                    </div>
+                </div>
+
+                <!-- Contact Card -->
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+                    <div>
+                        <p class="contact-label">CONTACT NO.</p>
+                        <p class="contact-value">+91 7455844809</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Divider -->
+            <div class="footer-divider"></div>
+
+            <!-- Developed By and Copyright -->
+            <div style="text-align: center; padding: 10px 0;">
+                <p style="margin: 0; color: rgba(255,255,255,0.8); font-size: 1rem; letter-spacing: 1px;">
+                    <i class="fas fa-code" style="margin-right: 8px; color: #ffd700;"></i>
+                    Developed by : <span style="color: white; font-weight: 700;">Shahzada Moon</span>
+                </p>
+                <p style="margin: 8px 0 0 0; color: rgba(255,255,255,0.6); font-size: 0.9rem;">
+                    <i class="far fa-copyright" style="margin-right: 5px;"></i> Copyright 2026. All rights reserved.
+                </p>
+            </div>
+
+            <!-- Decorative Elements -->
+            <div style="display: flex; gap: 15px; margin-top: 10px;">
+                <div class="footer-dot"></div>
+                <div class="footer-dot"></div>
+                <div class="footer-dot"></div>
+                <div class="footer-dot"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ================= YOUR GOOGLE SCRIPT URL =================
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxVl14EaEwnJy69LmQzhDqv9YgxDyGLkW8GNUmaOaQJAPkDH9m3ug1iEmm42wWnjmP-zQ/exec';
+
+        // DOM elements
+        const leaderboardBody = document.getElementById('leaderboardBody');
+        const statusDiv = document.getElementById('statusMessage');
+        const totalEntriesSpan = document.getElementById('totalEntries');
+        const refreshBtn = document.getElementById('refreshBtn');
+        const lastUpdatedSpan = document.getElementById('lastUpdated');
+        const notesBtn = document.getElementById('notesBtn');
+        const quizBtn = document.getElementById('quizBtn');
+        const leaderboardBtn = document.getElementById('leaderboardBtn');
+
+        // Show status message
+        function showStatus(msg, isSuccess = true) {
+            statusDiv.innerText = msg;
+            statusDiv.className = `status-message ${isSuccess ? 'success' : 'error'}`;
+            statusDiv.classList.remove('hidden');
+            setTimeout(() => statusDiv.classList.add('hidden'), 5000);
+        }
+
+        // Escape HTML to prevent XSS
+        function escapeHtml(unsafe) {
+            return unsafe.replace(/[&<>"']/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                if (m === '"') return '&quot;';
+                return '&#039;';
+            });
+        }
+
+        // Format timestamp
+        function formatTimestamp() {
+            const now = new Date();
+            return now.toLocaleTimeString() + ' on ' + now.toLocaleDateString();
+        }
+
+        // Get medal display based on rank
+        function getRankDisplay(rank) {
+            if (rank === 1) return '<i class="fas fa-crown medal-gold"></i> #1';
+            if (rank === 2) return '<i class="fas fa-medal medal-silver"></i> #2';
+            if (rank === 3) return '<i class="fas fa-medal medal-bronze"></i> #3';
+            return `#${rank}`;
+        }
+
+        // Load leaderboard from Google Sheets
+        async function loadLeaderboard() {
+            try {
+                // Show loading state
+                leaderboardBody.innerHTML = `
+                    <tr>
+                        <td colspan="3" class="no-data">
+                            <i class="fas fa-spinner fa-pulse"></i><br>
+                            Fetching results from Google Sheets...
+                        </td>
+                    </tr>
+                `;
+
+                // Fetch data from Google Sheets
+                const response = await fetch(GOOGLE_SCRIPT_URL + '?action=get', {
+                    method: 'GET',
+                    mode: 'cors'
+                });
+
+                if (!response.ok) throw new Error('Network response was not ok');
+                
+                const data = await response.json();
+                
+                // Update total entries
+                totalEntriesSpan.innerText = data.length;
+
+                if (!data || data.length === 0) {
+                    leaderboardBody.innerHTML = `
+                        <tr>
+                            <td colspan="3" class="no-data">
+                                <i class="fas fa-tired"></i><br>
+                                No submissions yet. Be the first to take the quiz!
+                            </td>
+                        </tr>
+                    `;
+                    lastUpdatedSpan.innerText = `Last updated: ${formatTimestamp()}`;
+                    return;
+                }
+
+                // Sort by score descending (highest first)
+                const sorted = [...data].sort((a, b) => b.score - a.score);
+
+                // Build leaderboard HTML
+                let html = '';
+                sorted.forEach((entry, idx) => {
+                    const rank = idx + 1;
+                    const name = entry.name || 'Anonymous';
+                    const score = `${entry.score} / ${entry.total}`;
+                    
+                    // Add special class for top 3
+                    let rankClass = '';
+                    if (rank === 1) rankClass = 'medal-gold';
+                    else if (rank === 2) rankClass = 'medal-silver';
+                    else if (rank === 3) rankClass = 'medal-bronze';
+                    
+                    html += `<tr>
+                        <td class="rank-col ${rankClass}">${getRankDisplay(rank)}</td>
+                        <td class="name-col">${escapeHtml(name)}</td>
+                        <td class="score-col">${score}</td>
+                    </tr>`;
+                });
+
+                leaderboardBody.innerHTML = html;
+                lastUpdatedSpan.innerText = `Last updated: ${formatTimestamp()}`;
+                showStatus('✅ Leaderboard refreshed successfully!', true);
+
+            } catch (error) {
+                console.error('Load error:', error);
+                leaderboardBody.innerHTML = `
+                    <tr>
+                        <td colspan="3" class="no-data">
+                            <i class="fas fa-exclamation-triangle" style="color: #dc3545;"></i><br>
+                            Failed to load leaderboard.<br>
+                            <small style="font-size: 0.9rem;">${error.message}</small>
+                        </td>
+                    </tr>
+                `;
+                showStatus('❌ Failed to load leaderboard. Check connection.', false);
+            }
+        }
+
+        // Event listeners
+        refreshBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            loadLeaderboard();
+        });
+
+        // Header button navigation
+        notesBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = 'notes.html'; // Update with your notes file name
+        });
+
+        quizBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = 'index.html'; // Update with your quiz file name
+        });
+
+        leaderboardBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            loadLeaderboard(); // Just refresh current page
+        });
+
+        // Auto-refresh every 30 seconds
+        setInterval(loadLeaderboard, 30000);
+
+        // Initial load
+        loadLeaderboard();
+
+        // Add keyboard shortcut (Ctrl+R to refresh)
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'r') {
+                e.preventDefault();
+                loadLeaderboard();
+            }
+        });
+    </script>
+</body>
+</html>
